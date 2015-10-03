@@ -1,0 +1,1 @@
+%training_mat = csvread('iris_training.csv', 1, 0);%test_mat = csvread('iris_testing_nb.csv', 1, 0);%nb(training_mat, test_mat)training_mat = csvread('iris_training.csv', 1, 0);test_mat = csvread('iris_testing_perceptron.csv', 1, 0);lp(training_mat, test_mat)
