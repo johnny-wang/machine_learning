@@ -1,0 +1,1 @@
+function [ val ] = gaussian_kernel( x_class, x )% x_class is a m x 2 matrix with all the features% x is a 1 x 2 matrix with the current feature%% val is a m x 2 matrix   lambda = .125;  diff = norm(x_class - x);  val = exp( -1 * lambda * (diff^2));%  val = exp( -lambda * (x_class - x)*(x_class - x)');end
