@@ -29,14 +29,25 @@ v = zeros(size(t,1),1);  % to return (m x 1)
 
 % for removing the class 1 stuff
 row_idx = find(d(:,3) > 1);
-class_xy = d(row_idx, :);     % make a copy of training data
-class_label = class_xy(:,end); % separate label to another vector (indexed the same)
+class_xy = d(row_idx, :);       % make a copy of training data
+class_label = class_xy(:,end);  % separate label to another vector (indexed the same)
 
-% change class 2 labels to +1 and class 3 to -1
+% change class 2 labels to +1
 row_idx = find(class_label(:,end) == 2);
 class_label(row_idx,:) = 1;
+
+% plot class 2 xy
+figure
+scatter(class_xy(row_idx, 1), class_xy(row_idx, 2), 'r')
+
+% change class 3 labels to -1
 row_idx = find(class_label(:,end) == 3);
 class_label(row_idx,:) = -1;
+
+% plot class 3 xy
+hold on
+scatter(class_xy(row_idx, 1), class_xy(row_idx, 2), 'g')
+
                               
 class_xy(:,end) = 1;          % last column = 1 so we can multiply with weight vec
 
@@ -50,6 +61,18 @@ for i=1:size(class_xy,1)
 end
 
 w_vec
+
+% plot weight vector line
+hold on
+m = w_vec(2)/w_vec(1);
+x = 0:0.1:10;
+plot(x, x*(-w_vec(1)/w_vec(2)));
+
+xlabel('x');
+ylabel('y');
+title('Training Data');
+legend('Class 2', 'Class 3');
+
 %%%%% classify test data
 
 % add 3rd column so it'll multiply correctly with weight vector
@@ -63,6 +86,16 @@ for i=1:size(pad_t,1)
     v(i) = 3;
   endif
 end
+
+figure
+scatter(pad_t(:, 1), pad_t(:, 2), 'b')
+hold on
+m = w_vec(2)/w_vec(1);
+x = 0:0.1:10;
+plot(x, x*(-w_vec(1)/w_vec(2)));
+xlabel('x');
+ylabel('y');
+title('Test Data');
 
 end
 

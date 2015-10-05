@@ -101,13 +101,14 @@ for i=1:size(t,1)
     p = a(j) * class_label(j) * gaussian_kernel(class_xy(j,:), t(i,:));
     predict = predict + p;
   end
-  test_pts(i,3) = predict;
   predict = sign(predict);
 %  predict = sign(sum(a .* class_label .* gaussian_kernel(class_xy, pad_t(i,:))));
   if predict == 1
     v(i) = 2;
+    test_pts(i,3) = 2;
   else
     v(i) = 3;
+    test_pts(i,3) = 3;
   endif
 end
 
@@ -117,9 +118,57 @@ end
 %surf(test_pts)
 
 %hold on
-%scatter3(test_pts(:,1), test_pts(:,2), test_pts(:,3))
+figure
+class2 = test_pts(find(test_pts(:,3) == 2), :);
+class3 = test_pts(find(test_pts(:,3) == 3), :);
+scatter3(class2(:,1), class2(:,2), class2(:,3), 'r')
+hold on
+scatter3(class3(:,1), class3(:,2), class3(:,3), 'g')
 
 %%%%% Graphing
 
+x = 0:0.25:10
+y = 0:0.25:5
+
+plot_pts = []
+
+for tmp_x=x
+  for tmp_y=y
+    plot_pts = [plot_pts; tmp_x tmp_y 0];
+  end
+end
+
+size(plot_pts)
+size(class_xy)
+size(a)
+
+for i=1:size(plot_pts,1)
+  predict = 0;
+  for j=1:size(class_xy,1)
+    p = a(j) * class_label(j) * gaussian_kernel(class_xy(j,:), plot_pts(i,1:2));
+    predict = predict + p;    
+  end
+  predict = sign(predict);
+  if predict == 1
+    plot_pts(i,3) = 2;
+  elseif predict == -1
+    plot_pts(i,3) = 3;
+  else
+    plot_pts(i,3) = 0;
+  end
+  
+end
+
+figure
+scatter3(plot_pts(:,1), plot_pts(:,2), plot_pts(:,3), 'g')
+hold on
+scatter3(class2(:,1), class2(:,2), class2(:,3), 'r')
+hold on
+scatter3(class3(:,1), class3(:,2), class3(:,3), 'b')
+xlabel('x');
+ylabel('y');
+zlabel('Class Label');
+title('Scatter Plot Showing Boundary and Classification of Points');
+legend('Extra Points', 'Class 2', 'Class 3')
 
 end
